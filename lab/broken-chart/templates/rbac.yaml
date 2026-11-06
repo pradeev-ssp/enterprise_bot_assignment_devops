@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: reporter
+  name: {{ .Values.reporter.serviceAccountName }}
   labels:
     app: reporter
     {{- include "lab.labels" . | nindent 4 }}
@@ -31,5 +31,5 @@ roleRef:
   name: reporter-read
 subjects:
   - kind: ServiceAccount
-    name: default
+    name: {{ .Values.reporter.serviceAccountName }}
     namespace: {{ .Release.Namespace }}
