@@ -1,0 +1,30 @@
+replicaCount: 2
+
+image:
+  repository: demo-app
+  tag: v1
+  pullPolicy: IfNotPresent
+
+config:
+  appName: enterprise-bot
+  version: "1.0.0"
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8000
+
+ingress:
+  enabled: true
+  className: nginx
+  host: demo.local
+  path: /
+  pathType: Prefix
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
