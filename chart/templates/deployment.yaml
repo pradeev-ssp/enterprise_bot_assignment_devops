@@ -1,3 +1,4 @@
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20,9 +21,10 @@ spec:
           ports:
             - containerPort: 8000
 
-          envFrom:
-            - configMapRef:
-                name: {{ .Release.Name }}-config
+          volumeMounts:
+            - name: app-config
+              mountPath: /etc/demo-config
+              readOnly: true
 
           livenessProbe:
             httpGet:
@@ -40,3 +42,8 @@ spec:
 
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+
+      volumes:
+        - name: app-config
+          configMap:
+            name: {{ .Release.Name }}-config

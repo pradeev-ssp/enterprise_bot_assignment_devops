@@ -1,16 +1,29 @@
+
 import os
 import socket
+from pathlib import Path
 
 from fastapi import FastAPI
 
 app = FastAPI()
 
+CONFIG_DIR = Path("/etc/demo-config")
+
+
+def get_config(key, default):
+    config_file = CONFIG_DIR / key
+
+    if config_file.exists():
+        return config_file.read_text().strip()
+
+    return os.getenv(key, default)
+
 
 @app.get("/")
 def root():
     return {
-        "app": os.getenv("APP_NAME", "demo-app"),
-        "version": os.getenv("VERSION", "1.0.0"),
+        "app": get_config("APP_NAME", "demo-app"),
+        "version": get_config("VERSION", "1.0.0"),
         "pod": socket.gethostname()
     }
 
